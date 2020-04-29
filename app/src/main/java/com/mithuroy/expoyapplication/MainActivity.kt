@@ -11,9 +11,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val simpleModels = getSimpleData()
-        recyclerView.apply {
-            adapter = SimpleAdapter(simpleModels)
-            layoutManager = LinearLayoutManager(this@MainActivity)
+
+        recyclerView.withModels {
+            simpleModels.forEachIndexed { index, data ->
+                when(data.type) {
+                    "Header" -> header {
+                        id(index)
+                        headerContent("Pos: $index ${data.content}")
+                    }
+                    "Content" -> content {
+                        id(index)
+                        simpleModel(data)
+                    }
+                    "Footer" -> footer {
+                        id(index)
+                        footerContent("#$index ${data.content}")
+                    }
+                }
+            }
         }
     }
 }
