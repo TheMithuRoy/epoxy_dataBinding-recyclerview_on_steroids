@@ -1,8 +1,8 @@
 package com.mithuroy.expoyapplication
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -11,21 +11,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val simpleModels = getSimpleData()
+        populateList(simpleModels)
 
+    }
+
+    private fun populateList(simpleModels: MutableList<SimpleModel>) {
         recyclerView.withModels {
-            simpleModels.forEachIndexed { index, data ->
-                when(data.type) {
+            simpleModels.forEachIndexed { position, model ->
+                when (model.type) {
                     "Header" -> header {
-                        id(index)
-                        headerContent("Pos: $index ${data.content}")
+                        id(position)
+                        headerContent("Pos:$position ${model.content}")
                     }
                     "Content" -> content {
-                        id(index)
-                        simpleModel(data)
+                        id(position)
+                        simpleModel(model)
+                        onClickContent { _ ->
+                            Toast.makeText(this@MainActivity, model.content, Toast.LENGTH_SHORT).show()
+                            simpleModels.removeAt(position)
+                            populateList(simpleModels)
+                        }
                     }
                     "Footer" -> footer {
-                        id(index)
-                        footerContent("#$index ${data.content}")
+                        id(position)
+                        footerContent("$position ${model.content}")
                     }
                 }
             }

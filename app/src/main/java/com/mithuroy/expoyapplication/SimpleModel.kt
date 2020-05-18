@@ -2,7 +2,7 @@ package com.mithuroy.expoyapplication
 
 data class SimpleModel(val type: String, val content: String)
 
-fun getSimpleData() = listOf(
+fun getSimpleData() = mutableListOf(
         SimpleModel("Header", "Category1"),
         SimpleModel("Content", "Lorem-Ipsum"),
         SimpleModel("Content", "Lorem-dasd"),
